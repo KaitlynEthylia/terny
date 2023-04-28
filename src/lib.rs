@@ -27,7 +27,7 @@ impl Parse for Ternary {
 }
 
 /// The only macro exported by the `terny` crate.
-/// A simple, C-like, ternary opperator for cleaner syntax.
+/// A simple, C-like, ternary operator for cleaner syntax.
 ///
 /// # Examples
 ///
