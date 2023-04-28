@@ -1,0 +1,15 @@
+[package]
+name = "terny"
+version = "0.1.0"
+description = "A simple, C-like, ternary opperator for cleaner syntax."
+authors = ["KaitlynEthylia <kaitlyyn.ethylia@proton.me>"]
+edition = "2021"
+repository = "https://github.com/KaitlynEthylia/terny"
+license = "Unlicense"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+quote = "1.0.26"
+syn = "2.0.15"
