@@ -1,29 +1,9 @@
-use proc_macro::TokenStream;
-use quote::quote;
-use syn::parse::{Parse, ParseStream};
-use syn::{parse_macro_input, Token};
-use syn::{Expr, Result};
+use proc_macro::{Delimiter, Group, Ident, Spacing, Span, TokenStream, TokenTree};
 
-struct Ternary {
-	condition: Expr,
-	truthy: Expr,
-	falsey: Expr,
-}
-
-impl Parse for Ternary {
-	fn parse(input: ParseStream) -> Result<Self> {
-		let condition: Expr = input.parse()?;
-		input.parse::<Token![?]>()?;
-		let truthy: Expr = input.parse()?;
-		input.parse::<Token![:]>()?;
-		let falsey: Expr = input.parse()?;
-
-		Ok(Ternary {
-			condition,
-			truthy,
-			falsey,
-		})
-	}
+enum ParseState {
+	Normal,
+	TrueClause,
+	FalseClause,
 }
 
 /// The only macro exported by the `terny` crate.
@@ -46,14 +26,52 @@ impl Parse for Ternary {
 /// ```
 #[proc_macro]
 pub fn iff(input: TokenStream) -> TokenStream {
-	let Ternary {
-		condition,
-		truthy,
-		falsey,
-	} = parse_macro_input!(input as Ternary);
+	let iter = input.into_iter();
+	let iif = Ident::new("if", Span::call_site());
 
-	let expanded = quote!(
-	if #condition { #truthy } else { #falsey }
+	let mut output: Vec<TokenTree> = vec![];
+	let mut true_clause: Vec<TokenTree> = vec![];
+	let mut false_clause: Vec<TokenTree> = vec![];
+	output.push(TokenTree::Ident(iif));
+
+	let mut state = ParseState::Normal;
+
+	for token in iter {
+		if let TokenTree::Punct(ref punc) = token {
+			if punc.spacing() == Spacing::Alone {
+				match (punc.as_char(), &state) {
+					('?', &ParseState::Normal) => {
+						state = ParseState::TrueClause;
+						continue;
+					},
+					(':', &ParseState::TrueClause) => {
+						state = ParseState::FalseClause;
+						continue;
+					},
+					_ => {},
+				}
+			}
+		}
+
+		match state {
+			ParseState::Normal => output.push(token),
+			ParseState::TrueClause => true_clause.push(token),
+			ParseState::FalseClause => false_clause.push(token),
+		}
+	}
+	let true_group = Group::new(
+		Delimiter::Brace,
+		TokenStream::from_iter(true_clause.into_iter()),
 	);
-	TokenStream::from(expanded)
+	let ielse = Ident::new("else", Span::call_site());
+	let false_group = Group::new(
+		Delimiter::Brace,
+		TokenStream::from_iter(false_clause.into_iter()),
+	);
+
+	output.push(TokenTree::Group(true_group));
+	output.push(TokenTree::Ident(ielse));
+	output.push(TokenTree::Group(false_group));
+
+	TokenStream::from_iter(output.into_iter())
 }

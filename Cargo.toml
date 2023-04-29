@@ -1,15 +1,12 @@
 [package]
 name = "terny"
-version = "0.1.0"
+version = "0.2.0"
 description = "A simple, C-like, ternary operator for cleaner syntax."
 authors = ["KaitlynEthylia <kaitlyyn.ethylia@proton.me>"]
 edition = "2021"
+docs = "https://docs.rs/terny"
 repository = "https://github.com/KaitlynEthylia/terny"
 license = "Unlicense"
 
 [lib]
 proc-macro = true
-
-[dependencies]
-quote = "1.0.26"
-syn = "2.0.15"
