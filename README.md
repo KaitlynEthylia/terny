@@ -1,7 +1,7 @@
-![Github.com/KaitlynEthylia/terny](https://img.shields.io/badge/Github-KaitlynEthylia%2Fterny-cec2fc?logo=github&style=for-the-badge)
-![Crates.io/crates/terny](https://img.shields.io/crates/v/terny?color=%23f7b679&logo=rust&style=for-the-badge)
-![Unlicense](https://img.shields.io/crates/l/terny?color=bfdfff&logo=unlicense&style=for-the-badge)
-![Docs.rs/terny](https://img.shields.io/docsrs/terny?color=AAff99&logo=docs.rs&style=for-the-badge)
+[![Github](https://img.shields.io/badge/Github-KaitlynEthylia%2Fterny-cec2fc?logo=github&style=for-the-badge)](https://github.com/KaitlynEthylia/terny)
+[![Crates.io](https://img.shields.io/crates/v/terny?color=%23f7b679&logo=rust&style=for-the-badge)](https://crates.io/crates/terny)
+[![Unlicense](https://img.shields.io/crates/l/terny?color=bfdfff&logo=unlicense&style=for-the-badge)](https://unlicense.org/)
+[![Docs.rs](https://img.shields.io/docsrs/terny?color=AAff99&logo=docs.rs&style=for-the-badge)](https://docs.rs/terny)
 
 
 A simple ternary operator macro in rust. the `iff!` macro is the only item exported by this crate, it simply takes three expressions, seperated by `?` and `:`, and expands them info an if else statement.
